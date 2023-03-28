@@ -3,20 +3,50 @@ import Cola.DinamicQueue;
 public class BinaryTree<T> implements TreeInterface<T> {
 
     BinaryTreeNodez<T> root;
-    int height = 0;
+    int elements = 0; //numero de elementos del arbol
+
+    public BinaryTree() {
+        this.root = null;
+        elements = 0;
+    }
+
+    public BinaryTree(T object) {
+        this.root = new BinaryTreeNodez<>(object);
+        elements = 1;
+    }
+
+    //crear un arbol a partir de sub-árboles
+    public BinaryTree(T object, BinaryTree<T> leftSubtree,BinaryTree<T> rightSubtree) {
+        this.root = new BinaryTreeNodez<>(object);
+        elements = 1;
+
+        if(leftSubtree != null){
+            elements = elements + leftSubtree.size();
+            root.left = leftSubtree.root;
+        } else {
+            root.left = null;
+        }
+
+        if(rightSubtree != null){
+            elements = elements + rightSubtree.size();
+            root.right = rightSubtree.root;
+        }else{
+            root.right = null;
+        }
+    }
 
     @Override
     public String preOrderToString(){
         return preOrderToString(root, "");
     }
 
-    public String preOrderToString(BinaryTreeNodez<T> raiz, String string) {
+    private String preOrderToString(BinaryTreeNodez<T> raiz, String string) {
         try{
             if(raiz != null){
                 string += raiz.getObject().toString();
                 string = preOrderToString(raiz.left, string);
                 string = preOrderToString(raiz.right, string);
-                height++; //??
+                elements++; //??
             }
             return string;
 
@@ -31,13 +61,14 @@ public class BinaryTree<T> implements TreeInterface<T> {
         return inOrderToString(root, "");
     }
 
-    public String inOrderToString(BinaryTreeNodez<T> root, String string) {
+    private String inOrderToString(BinaryTreeNodez<T> root, String string) {
         try{
+
             if(root != null){
                 string += root.left.getObject().toString();
-                string = preOrderToString(root, string);
-                string = preOrderToString(root.right, string);
-                height++; //??
+                string = inOrderToString(root, string);
+                string = inOrderToString(root.right, string);
+                elements++; //??
             }
             return string;
 
@@ -52,13 +83,13 @@ public class BinaryTree<T> implements TreeInterface<T> {
         return postOrderToString(root, "");
     }
 
-    public String postOrderToString(BinaryTreeNodez<T> root, String string) {
+    private String postOrderToString(BinaryTreeNodez<T> root, String string) {
         try{
             if(root != null){
                 string += root.left.getObject().toString();
-                string = preOrderToString(root.right, string);
-                string = preOrderToString(root, string);
-                height++; //??
+                string = postOrderToString(root.right, string);
+                string = postOrderToString(root, string);
+                elements++; //??
             }
             return string;
 
@@ -72,7 +103,7 @@ public class BinaryTree<T> implements TreeInterface<T> {
     public String widthOrderToString() {
         return widthOrderToString(root, "");
     }
-    public String widthOrderToString(BinaryTreeNodez<T> root, String string) {
+    private String widthOrderToString(BinaryTreeNodez<T> root, String string) {
 
         DinamicQueue<TreeNode<T>> queue = new DinamicQueue<>();
         queue.insert(root);
@@ -95,7 +126,7 @@ public class BinaryTree<T> implements TreeInterface<T> {
     public boolean insertWidth(T object) {
         return insertWidth(root, object);
     }
-    public boolean insertWidth(BinaryTreeNodez<T> raiz, T object){
+    private boolean insertWidth(BinaryTreeNodez<T> raiz, T object){
 
         try{
 
@@ -126,18 +157,29 @@ public class BinaryTree<T> implements TreeInterface<T> {
         return false;
     }
 
+    //insersion por inorder
     @Override
     public boolean insertDeep(T object) {
+        try{
+            if(root == null){
+                root = new BinaryTreeNodez<>(object);
+            }else{
+                insertDeep(root,object);
+            }
+            return true;
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
         return false;
     }
-
-    public boolean insertDeep(BinaryTreeNodez<T> raiz, T object){
+    private boolean insertDeep(BinaryTreeNodez<T> raiz, T object){
 
         //comprobar si un nivel está incompleto
 
         try{
 
-            boolean isOnLevel = false;
+
 
 
 
@@ -179,6 +221,11 @@ public class BinaryTree<T> implements TreeInterface<T> {
         }catch (Exception e){
             e.printStackTrace();
         }
+        return 0;
+    }
+
+    @Override
+    public int size() {
         return 0;
     }
 

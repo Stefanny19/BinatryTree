@@ -1,7 +1,7 @@
 package Cola;
 
-import Tools.DoublyLinkedList;
-import Tools.Node;
+import Cola.Tools.DoublyLinkedList;
+import Cola.Tools.Node;
 
 import java.util.Iterator;
 

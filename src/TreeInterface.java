@@ -8,4 +8,5 @@ public interface TreeInterface<T> {
     boolean removeWidth(T object);
     boolean removeDeep(T object);
     int height(BinaryTreeNodez<T> node);
+    int size();
 }
