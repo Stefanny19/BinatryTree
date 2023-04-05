@@ -9,12 +9,10 @@ public class BinaryTree<T> implements TreeInterface<T> {
         this.root = null;
         elements = 0;
     }
-
     public BinaryTree(T object) {
         this.root = new BinaryTreeNodez<>(object);
         elements = 1;
     }
-
     //crear un arbol a partir de sub-árboles
     public BinaryTree(T object, BinaryTree<T> leftSubtree,BinaryTree<T> rightSubtree) {
         this.root = new BinaryTreeNodez<>(object);
@@ -35,11 +33,11 @@ public class BinaryTree<T> implements TreeInterface<T> {
         }
     }
 
+    //Recorridos
     @Override
     public String preOrderToString(){
         return preOrderToString(root, "");
     }
-
     private String preOrderToString(BinaryTreeNodez<T> raiz, String string) {
         try{
             if(raiz != null){
@@ -55,12 +53,10 @@ public class BinaryTree<T> implements TreeInterface<T> {
         }
         return null;
     }
-
     @Override
     public String inOrderToString() {
         return inOrderToString(root, "");
     }
-
     private String inOrderToString(BinaryTreeNodez<T> root, String string) {
         try{
 
@@ -77,12 +73,10 @@ public class BinaryTree<T> implements TreeInterface<T> {
         }
         return null;
     }
-
     @Override
     public String postOrderToString() {
         return postOrderToString(root, "");
     }
-
     private String postOrderToString(BinaryTreeNodez<T> root, String string) {
         try{
             if(root != null){
@@ -98,7 +92,6 @@ public class BinaryTree<T> implements TreeInterface<T> {
         }
         return null;
     }
-
     @Override
     public String widthOrderToString() {
         return widthOrderToString(root, "");
@@ -122,6 +115,7 @@ public class BinaryTree<T> implements TreeInterface<T> {
         return string;
     }
 
+    //Insercion
     @Override
     public boolean insertWidth(T object) {
         return insertWidth(root, object);
@@ -156,8 +150,6 @@ public class BinaryTree<T> implements TreeInterface<T> {
         }
         return false;
     }
-
-    //insersion por inorder
     @Override
     public boolean insertDeep(T object) {
         try{
@@ -174,26 +166,53 @@ public class BinaryTree<T> implements TreeInterface<T> {
         return false;
     }
     private boolean insertDeep(BinaryTreeNodez<T> raiz, T object){
-
-        //comprobar si un nivel está incompleto
-
+        //insercion por preorder
         try{
+            //si los hijos izquierdos o derechos están vacios
+            if(raiz.left == null){
+                raiz.left = new BinaryTreeNodez<>(object);
+            }else if(raiz.right == null){
+                raiz.right = new BinaryTreeNodez<>(object);
+            }
 
+            //Si los hijos izquierdos y derechos están llenos, aplicar recursividad
+            if (raiz.left != null && raiz.right != null) {
+                insertDeep(raiz.left, object);
+            }else{
+                insertDeep(raiz.right, object);
+            }
 
-
-
-
+            return true;
         }catch(Exception e){
             e.printStackTrace();
         }
         return false;
     }
 
+    //Remover
     @Override
     public boolean removeWidth(T object) {
+        try{
+            if(root == null){
+                System.out.println("No se puede eliminar, el arbol está vacío");
+                return false;
+            }else{
+                removeWidth(root, object);
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
         return false;
     }
+    public boolean removeWidth(BinaryTreeNodez<T> raiz, T object){
+        try{
 
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return false;
+    }
     @Override
     public boolean removeDeep(T object) {
         return false;
@@ -228,6 +247,5 @@ public class BinaryTree<T> implements TreeInterface<T> {
     public int size() {
         return 0;
     }
-
 
 }
