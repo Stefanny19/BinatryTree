@@ -248,4 +248,41 @@ public class BinaryTree<T> implements TreeInterface<T> {
         return 0;
     }
 
+    private BinaryTreeNodez<T> reemplazar(BinaryTreeNodez<T> nodo){
+        try{
+            BinaryTreeNodez<T> resultado;
+
+            if((nodo.left == null) && (nodo.right == null)){
+                resultado = null;
+            }else if((nodo.left != null) && (nodo.right == null)){
+                resultado = nodo.left;
+            }else if((nodo.left == null) && (nodo.right != null)){
+                resultado = nodo.right;
+            }else{
+
+                BinaryTreeNodez<T> actual = nodo.right;
+                BinaryTreeNodez<T> padre = nodo;
+
+                while(actual.left != null){
+                    padre = actual;
+                    actual = actual.left;
+                }
+
+                if(nodo.right == actual){
+                    actual.left = nodo.left;
+                }else{
+                    padre.left = actual.right;
+                    actual.right = nodo.right;
+                    actual.left = nodo.left;
+                }
+
+                resultado = actual;
+            }
+            return resultado;
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
