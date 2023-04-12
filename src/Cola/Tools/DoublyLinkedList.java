@@ -627,7 +627,7 @@ public class DoublyLinkedList<T> implements List<T> {
 
                     temp = head;
                     head = link.next;
-                    head.prev = null;
+                    //head.prev = null;
                     temp = null;
                     length--;
 

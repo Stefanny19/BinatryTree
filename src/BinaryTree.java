@@ -1,4 +1,9 @@
 import Cola.DinamicQueue;
+import Cola.Tools.DoublyLinkedList;
+import Cola.Tools.DoublyLinkedListNode;
+import Cola.*;
+
+import java.util.LinkedList;
 
 public class BinaryTree<T> implements TreeInterface<T> {
 
@@ -36,17 +41,17 @@ public class BinaryTree<T> implements TreeInterface<T> {
     //Recorridos
     @Override
     public String preOrderToString(){
-        return preOrderToString(root, "");
+        LinkedList<T> lista = new LinkedList<>();
+        return preOrderToString(root, lista);
     }
-    private String preOrderToString(BinaryTreeNodez<T> raiz, String string) {
+    private String preOrderToString(BinaryTreeNodez<T> raiz, LinkedList<T> lista) {
         try{
             if(raiz != null){
-                string += raiz.getObject().toString();
-                string = preOrderToString(raiz.left, string);
-                string = preOrderToString(raiz.right, string);
-                elements++; //??
+                lista.add((T) raiz.getObject());
+                preOrderToString(raiz.left, lista);
+                preOrderToString(raiz.right, lista);
             }
-            return string;
+            return lista.toString();
 
         }catch (Exception e){
             e.printStackTrace();
@@ -55,18 +60,18 @@ public class BinaryTree<T> implements TreeInterface<T> {
     }
     @Override
     public String inOrderToString() {
-        return inOrderToString(root, "");
+        LinkedList<T> lista = new LinkedList<>();
+        return inOrderToString(this.root, lista);
     }
-    private String inOrderToString(BinaryTreeNodez<T> root, String string) {
+    private String inOrderToString(BinaryTreeNodez<T> root, LinkedList<T> lista) {
         try{
 
             if(root != null){
-                string += root.left.getObject().toString();
-                string = inOrderToString(root, string);
-                string = inOrderToString(root.right, string);
-                elements++; //??
+                inOrderToString(root.left, lista);
+                lista.add((T) root.data);
+                inOrderToString(root.right, lista);
             }
-            return string;
+            return lista.toString();
 
         }catch (Exception e){
             e.printStackTrace();
@@ -75,17 +80,17 @@ public class BinaryTree<T> implements TreeInterface<T> {
     }
     @Override
     public String postOrderToString() {
-        return postOrderToString(root, "");
+        LinkedList<T> lista = new LinkedList<>();
+        return postOrderToString(this.root, lista);
     }
-    private String postOrderToString(BinaryTreeNodez<T> root, String string) {
+    private String postOrderToString(BinaryTreeNodez<T> root, LinkedList<T> lista) {
         try{
             if(root != null){
-                string += root.left.getObject().toString();
-                string = postOrderToString(root.right, string);
-                string = postOrderToString(root, string);
-                elements++; //??
+                postOrderToString(root.left, lista);
+                postOrderToString(root.right, lista);
+                lista.add((T) root.data);
             }
-            return string;
+            return lista.toString();
 
         }catch (Exception e){
             e.printStackTrace();
@@ -94,25 +99,29 @@ public class BinaryTree<T> implements TreeInterface<T> {
     }
     @Override
     public String widthOrderToString() {
-        return widthOrderToString(root, "");
+        LinkedList<T> lista = new LinkedList<>();
+        return widthOrderToString(root, lista);
     }
-    private String widthOrderToString(BinaryTreeNodez<T> root, String string) {
+    private String widthOrderToString(BinaryTreeNodez<T> root, LinkedList<T> lista) {
 
-        DinamicQueue<TreeNode<T>> queue = new DinamicQueue<>();
+        DinamicQueue<BinaryTreeNodez<T>> queue = new DinamicQueue<>();
         queue.insert(root);
 
         while(!queue.isEmpty()){
-            BinaryTreeNodez<T> temp = (BinaryTreeNodez<T>) queue.extract();
-            string += temp.getObject().toString();
+            BinaryTreeNodez<T> temp = queue.extract();
 
-            if(temp.left != null){
-                queue.insert(temp.left);
-            }
-            if(temp.right != null){
-                queue.insert(temp.right);
+            if(temp != null){
+                lista.add((T) temp.data);
+
+                if(temp.left != null){
+                    queue.insert(temp.left);
+                }
+                if(temp.right != null){
+                    queue.insert(temp.right);
+                }
             }
         }
-        return string;
+        return lista.toString();
     }
 
     //Insercion
@@ -121,27 +130,35 @@ public class BinaryTree<T> implements TreeInterface<T> {
         return insertWidth(root, object);
     }
     private boolean insertWidth(BinaryTreeNodez<T> raiz, T object){
-
         try{
 
-            DinamicQueue<TreeNode<T>> queue = new DinamicQueue<>();
+            DinamicQueue<BinaryTreeNodez<T>> queue = new DinamicQueue<>();
             queue.insert(raiz);
 
             while(!queue.isEmpty()){
-                BinaryTreeNodez<T> temp = (BinaryTreeNodez<T>) queue.extract();
+                BinaryTreeNodez<T> temp = queue.extract();
 
-                if(temp.left != null){
-                    queue.insert(temp.left);
+                if(temp != null){
+
+                    if(temp.left != null){
+                        queue.insert(temp.left);
+                    }else{
+                        temp.left = new BinaryTreeNodez<>(object);
+                        //root = temp;
+                        return true;
+                    }
+                    if(temp.right != null){
+                        queue.insert(temp.right);
+                    }else{
+                        temp.right = new BinaryTreeNodez<>(object);
+                        //root = temp;
+                        return  true;
+                    }
                 }else{
-                    temp.left = new BinaryTreeNodez<>(object);
-                    return true;
+                    temp = new BinaryTreeNodez<>(object);
+                    //root = temp;
                 }
-                if(temp.right != null){
-                    queue.insert(temp.right);
-                }else{
-                    temp.right = new BinaryTreeNodez<>(object);
-                    return  true;
-                }
+
             }
             return false;
 
