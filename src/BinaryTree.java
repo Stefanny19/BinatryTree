@@ -16,7 +16,6 @@ public class BinaryTree<T> implements TreeInterface<T> {
     }
     public BinaryTree(T object) {
         this.root = new BinaryTreeNodez<>(object);
-        elements = 1;
     }
     //crear un arbol a partir de sub-árboles
     public BinaryTree(T object, BinaryTree<T> leftSubtree,BinaryTree<T> rightSubtree) {
@@ -38,20 +37,25 @@ public class BinaryTree<T> implements TreeInterface<T> {
         }
     }
 
+    @Override
+    public boolean isEmpty() {
+        return root == null;
+    }
+
     //Recorridos
     @Override
-    public String preOrderToString(){
+    public LinkedList<T> preOrder(){
         LinkedList<T> lista = new LinkedList<>();
-        return preOrderToString(root, lista);
+        return preOrder(root, lista);
     }
-    private String preOrderToString(BinaryTreeNodez<T> raiz, LinkedList<T> lista) {
+    private LinkedList<T> preOrder(BinaryTreeNodez<T> raiz, LinkedList<T> lista) {
         try{
             if(raiz != null){
-                lista.add((T) raiz.getObject());
-                preOrderToString(raiz.left, lista);
-                preOrderToString(raiz.right, lista);
+                lista.add(raiz.data);
+                preOrder(raiz.left, lista);
+                preOrder(raiz.right, lista);
             }
-            return lista.toString();
+            return lista;
 
         }catch (Exception e){
             e.printStackTrace();
@@ -59,19 +63,19 @@ public class BinaryTree<T> implements TreeInterface<T> {
         return null;
     }
     @Override
-    public String inOrderToString() {
+    public LinkedList<T> inOrder() {
         LinkedList<T> lista = new LinkedList<>();
-        return inOrderToString(this.root, lista);
+        return inOrder(this.root, lista);
     }
-    private String inOrderToString(BinaryTreeNodez<T> root, LinkedList<T> lista) {
+    private LinkedList<T> inOrder(BinaryTreeNodez<T> root, LinkedList<T> lista) {
         try{
 
             if(root != null){
-                inOrderToString(root.left, lista);
-                lista.add((T) root.data);
-                inOrderToString(root.right, lista);
+                inOrder(root.left, lista);
+                lista.add(root.data);
+                inOrder(root.right, lista);
             }
-            return lista.toString();
+            return lista;
 
         }catch (Exception e){
             e.printStackTrace();
@@ -79,18 +83,18 @@ public class BinaryTree<T> implements TreeInterface<T> {
         return null;
     }
     @Override
-    public String postOrderToString() {
+    public LinkedList<T> postOrder() {
         LinkedList<T> lista = new LinkedList<>();
-        return postOrderToString(this.root, lista);
+        return postOrder(root, lista);
     }
-    private String postOrderToString(BinaryTreeNodez<T> root, LinkedList<T> lista) {
+    private LinkedList<T> postOrder(BinaryTreeNodez<T> root, LinkedList<T> lista) {
         try{
             if(root != null){
-                postOrderToString(root.left, lista);
-                postOrderToString(root.right, lista);
-                lista.add((T) root.data);
+                postOrder(root.left, lista);
+                postOrder(root.right, lista);
+                lista.add(root.data);
             }
-            return lista.toString();
+            return lista;
 
         }catch (Exception e){
             e.printStackTrace();
@@ -98,11 +102,11 @@ public class BinaryTree<T> implements TreeInterface<T> {
         return null;
     }
     @Override
-    public String widthOrderToString() {
+    public LinkedList<T> widthOrder() {
         LinkedList<T> lista = new LinkedList<>();
-        return widthOrderToString(root, lista);
+        return widthOrder(root, lista);
     }
-    private String widthOrderToString(BinaryTreeNodez<T> root, LinkedList<T> lista) {
+    private LinkedList<T> widthOrder(BinaryTreeNodez<T> root, LinkedList<T> lista) {
 
         DinamicQueue<BinaryTreeNodez<T>> queue = new DinamicQueue<>();
         queue.insert(root);
@@ -111,7 +115,7 @@ public class BinaryTree<T> implements TreeInterface<T> {
             BinaryTreeNodez<T> temp = queue.extract();
 
             if(temp != null){
-                lista.add((T) temp.data);
+                lista.add(temp.data);
 
                 if(temp.left != null){
                     queue.insert(temp.left);
@@ -121,7 +125,7 @@ public class BinaryTree<T> implements TreeInterface<T> {
                 }
             }
         }
-        return lista.toString();
+        return lista;
     }
 
     //Insercion
@@ -131,6 +135,12 @@ public class BinaryTree<T> implements TreeInterface<T> {
     }
     private boolean insertWidth(BinaryTreeNodez<T> raiz, T object){
         try{
+
+            if(root == null){
+                root = new BinaryTreeNodez<>(object);
+                raiz = root;
+                elements++;
+            }
 
             DinamicQueue<BinaryTreeNodez<T>> queue = new DinamicQueue<>();
             queue.insert(raiz);
@@ -144,19 +154,20 @@ public class BinaryTree<T> implements TreeInterface<T> {
                         queue.insert(temp.left);
                     }else{
                         temp.left = new BinaryTreeNodez<>(object);
-                        //root = temp;
+                        elements++;
                         return true;
                     }
                     if(temp.right != null){
                         queue.insert(temp.right);
                     }else{
                         temp.right = new BinaryTreeNodez<>(object);
-                        //root = temp;
+                        elements++;
                         return  true;
                     }
                 }else{
                     temp = new BinaryTreeNodez<>(object);
-                    //root = temp;
+                    elements++;
+                    return true;
                 }
 
             }
@@ -169,34 +180,31 @@ public class BinaryTree<T> implements TreeInterface<T> {
     }
     @Override
     public boolean insertDeep(T object) {
-        try{
-            if(root == null){
-                root = new BinaryTreeNodez<>(object);
-            }else{
-                insertDeep(root,object);
-            }
-            return true;
-
-        }catch(Exception e){
-            e.printStackTrace();
+        if(root == null){
+            root = new BinaryTreeNodez<>(object);
+            elements++;
         }
-        return false;
+        return insertDeep(root, object);
     }
     private boolean insertDeep(BinaryTreeNodez<T> raiz, T object){
         //insercion por preorder
         try{
+            if(raiz == null){
+                return false;
+            }
+
             //si los hijos izquierdos o derechos están vacios
             if(raiz.left == null){
                 raiz.left = new BinaryTreeNodez<>(object);
             }else if(raiz.right == null){
                 raiz.right = new BinaryTreeNodez<>(object);
-            }
-
-            //Si los hijos izquierdos y derechos están llenos, aplicar recursividad
-            if (raiz.left != null && raiz.right != null) {
-                insertDeep(raiz.left, object);
-            }else{
-                insertDeep(raiz.right, object);
+            }else {
+                //Si los hijos izquierdos y derechos están llenos, aplicar recursividad
+                if (raiz.left != null && raiz.right != null) {
+                    insertDeep(raiz.left, object);
+                }else{
+                    insertDeep(raiz.right, object);
+                }
             }
 
             return true;
@@ -206,6 +214,77 @@ public class BinaryTree<T> implements TreeInterface<T> {
         return false;
     }
 
+    //Buscar
+    @Override
+    public boolean searchWidth(T object) {
+        if(isEmpty()){
+            System.out.println("El arbol está vacío");
+            return false;
+        }
+        return searchWidth(root, object);
+    }
+    private boolean searchWidth(BinaryTreeNodez<T> node, T object){
+        try{
+            if(node == null){
+                return false;
+            }
+
+            DinamicQueue<BinaryTreeNodez<T>> queue = new DinamicQueue<>();
+            queue.insert(root);
+
+            while(!queue.isEmpty()){
+                BinaryTreeNodez<T> temp = queue.extract();
+
+                if(temp != null){
+
+                    if(temp.left != null){
+                        if(temp.left.data.equals(object)){
+                            queue.clear();
+                            return true;
+                        }else {
+                            queue.insert(temp.left);
+                        }
+                    }
+                    if(temp.right != null){
+                        if(temp.right.data.equals(object)){
+                            queue.clear();
+                            return true;
+                        }else {
+                            queue.insert(temp.right);
+                        }
+                    }
+                }
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
+    public boolean searchDeep(T object) {
+        if(isEmpty()){
+            System.out.println("El arbol está vacío");
+            return false;
+        }
+        return searchDeep(root, object);
+    }
+    private boolean searchDeep(BinaryTreeNodez<T> nodo, T object){
+        try{
+            if(nodo != null){
+                //Recorrido en PostOrder
+
+                boolean foundleft = searchDeep(nodo.left,object);
+                boolean foundRight = searchDeep(nodo.right, object);
+
+                return nodo.data.equals(object) || foundleft || foundRight;
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return false;
+    }
     //Remover
     @Override
     public boolean removeWidth(T object) {
@@ -221,7 +300,7 @@ public class BinaryTree<T> implements TreeInterface<T> {
         }
         return false;
     }
-    public boolean removeWidth(BinaryTreeNodez<T> raiz, T object){
+    private boolean removeWidth(BinaryTreeNodez<T> raiz, T object){
         try{
 
 
@@ -236,24 +315,25 @@ public class BinaryTree<T> implements TreeInterface<T> {
     }
 
     @Override
-    public int height(BinaryTreeNodez<T> root) {
-
+    public int height(){
+        return height(root);
+    }
+    public int height(BinaryTreeNodez<T> nodo) {
         try{
-            if(root == null){
+            if(isEmpty() || nodo == null){
                 return 0;
-            }
-
-            //Obtener la altura de cada nodo, derecho e izquierdo
-            int rHeight = height(root.right);
-            int lHeight = height(root.left);
-
-            //Comprobar cual es el mayor
-            if(rHeight > lHeight){
-                return rHeight;
             }else{
-                return lHeight;
-            }
+                //caluclar los subarboles izquierdo y derecho
+                int leftSubtree = height(nodo.left);
+                int rightSubtree = height(nodo.right);
 
+                //Calcular el mayor
+                if(leftSubtree > rightSubtree){
+                    return leftSubtree + 1;
+                }else{
+                    return rightSubtree + 1;
+                }
+            }
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -262,19 +342,67 @@ public class BinaryTree<T> implements TreeInterface<T> {
 
     @Override
     public int size() {
+        return elements;
+    }
+    @Override
+    public int nodeCount() {
+        try{
+            return root.cantHijos();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
         return 0;
     }
 
+    //El arbol de altura k está lleno si tiene 2^k-1 nodos
+    @Override
+    public boolean isFull() {
+        int nodeCant = (int) (Math.pow(2,height()) - 1);
+        return size() == nodeCant;
+    }
+
+    /*Si está lleno hasta el nivel k-1 y todos los nodos están lo más a la izquierda posible*/
+    @Override
+    public boolean isComplete() {
+        return isComplete(root,height(), 0);
+    }
+    public boolean isComplete(BinaryTreeNodez<T> nodo, int height, int level){
+        if(nodo == null){
+            return true;
+        }
+        if(level >= height){ //si el nivel actual es mayor a la altura del arbol
+            return false;
+        }
+
+        if(isComplete(nodo.left, height, level+1) && isComplete(nodo.right, height, level+1)){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    //Devuelve el nodo que sustituirá al que se va a reemplazar en el medoto remove
+
+    /*
+    Referencia para la realizacion del método reemplazar: Estructura de datos con java, diseño de estructuras y algoritmos
+    Autrores: John Lewis y Joseph Chase
+     */
     private BinaryTreeNodez<T> reemplazar(BinaryTreeNodez<T> nodo){
         try{
             BinaryTreeNodez<T> resultado;
 
+            //Evaluacion del nodo en tres casos
+            //Caso 1: El nodo no tiene ningun hijo
             if((nodo.left == null) && (nodo.right == null)){
                 resultado = null;
+
+                //Caso 2: El nodo solo tiene un hijo
             }else if((nodo.left != null) && (nodo.right == null)){
                 resultado = nodo.left;
             }else if((nodo.left == null) && (nodo.right != null)){
                 resultado = nodo.right;
+
+                //Caso 3: El nodo tiene dos hijos. Evaluar a la derecha
             }else{
 
                 BinaryTreeNodez<T> actual = nodo.right;
@@ -293,6 +421,7 @@ public class BinaryTree<T> implements TreeInterface<T> {
                     actual.left = nodo.left;
                 }
 
+                //Devuelve el sucesor del nodo que hay que eliminar
                 resultado = actual;
             }
             return resultado;

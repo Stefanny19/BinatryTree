@@ -1,4 +1,4 @@
-public class BinaryTreeNodez<T> extends TreeNode {
+public class BinaryTreeNodez<T> extends TreeNode<T> {
 
     BinaryTreeNodez<T> left, right;
 
@@ -31,6 +31,22 @@ public class BinaryTreeNodez<T> extends TreeNode {
 
     public void setRight(BinaryTreeNodez<T> right) {
         this.right = right;
+    }
+
+    public int cantHijos(){
+        try{
+            int nodeCant = 0;
+
+            if(left != null)
+                nodeCant = 1 + left.cantHijos();
+            if(right != null)
+                nodeCant = nodeCant + 1 + right.cantHijos();
+
+            return nodeCant;
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return 0;
     }
 
     @Override
