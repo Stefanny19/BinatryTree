@@ -131,16 +131,16 @@ public class BinaryTree<T> implements TreeInterface<T> {
     //Insercion
     @Override
     public boolean insertWidth(T object) {
-        return insertWidth(root, object);
+        if(root == null){
+            root = new BinaryTreeNodez<>(object);
+            elements++;
+            return  true;
+        }else{
+            return insertWidth(root, object);
+        }
     }
     private boolean insertWidth(BinaryTreeNodez<T> raiz, T object){
         try{
-
-            if(root == null){
-                root = new BinaryTreeNodez<>(object);
-                raiz = root;
-                elements++;
-            }
 
             DinamicQueue<BinaryTreeNodez<T>> queue = new DinamicQueue<>();
             queue.insert(raiz);
@@ -196,8 +196,10 @@ public class BinaryTree<T> implements TreeInterface<T> {
             //si los hijos izquierdos o derechos están vacios
             if(raiz.left == null){
                 raiz.left = new BinaryTreeNodez<>(object);
+                elements++;
             }else if(raiz.right == null){
                 raiz.right = new BinaryTreeNodez<>(object);
+                elements++;
             }else {
                 //Si los hijos izquierdos y derechos están llenos, aplicar recursividad
                 if (raiz.left != null && raiz.right != null) {
@@ -261,7 +263,6 @@ public class BinaryTree<T> implements TreeInterface<T> {
         }
         return false;
     }
-
     @Override
     public boolean searchDeep(T object) {
         if(isEmpty()){
@@ -274,7 +275,6 @@ public class BinaryTree<T> implements TreeInterface<T> {
         try{
             if(nodo != null){
                 //Recorrido en PostOrder
-
                 boolean foundleft = searchDeep(nodo.left,object);
                 boolean foundRight = searchDeep(nodo.right, object);
 
@@ -285,16 +285,16 @@ public class BinaryTree<T> implements TreeInterface<T> {
         }
         return false;
     }
+
     //Remover
     @Override
     public boolean removeWidth(T object) {
         try{
-            if(root == null){
+            if(isEmpty()) {
                 System.out.println("No se puede eliminar, el arbol está vacío");
                 return false;
-            }else{
-                removeWidth(root, object);
             }
+             return removeWidth(root, object);
         }catch(Exception e){
             e.printStackTrace();
         }
@@ -302,7 +302,40 @@ public class BinaryTree<T> implements TreeInterface<T> {
     }
     private boolean removeWidth(BinaryTreeNodez<T> raiz, T object){
         try{
+            if(raiz == null){
+                return false;
+            }
+            DinamicQueue<BinaryTreeNodez<T>> queue = new DinamicQueue<>();
+            queue.insert(root);
 
+            while(!queue.isEmpty()){
+                BinaryTreeNodez<T> temp = queue.extract();
+
+                if(temp != null){
+
+                    if(temp.left != null){
+                        if(temp.left.data.equals(object)){
+                            temp.left = reemplazar(temp.left);
+                            elements--;
+                            queue.clear();
+                            return true;
+                        }else {
+                            queue.insert(temp.left);
+                        }
+                    }
+                    if(temp.right != null){
+                        if(temp.right.data.equals(object)){
+                            temp.right = reemplazar(temp.right);
+                            elements--;
+                            queue.clear();
+                            return true;
+                        }else {
+                            queue.insert(temp.right);
+                        }
+                    }
+                }
+
+            }
 
         }catch (Exception e){
             e.printStackTrace();
@@ -311,6 +344,45 @@ public class BinaryTree<T> implements TreeInterface<T> {
     }
     @Override
     public boolean removeDeep(T object) {
+        try{
+            if(isEmpty()) {
+                System.out.println("No se puede eliminar, el arbol está vacío");
+                return false;
+            }
+            return removeDeep(root, object);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return false;
+    }
+    private boolean removeDeep(BinaryTreeNodez<T> raiz, T object){
+        try{
+            if (raiz == null) {
+                return false;
+            }
+
+            if(raiz.left != null){
+                if(raiz.left.data.equals(object)){
+                    raiz.left = reemplazar(raiz.left);
+                    elements--;
+                    return true;
+                }
+            }else if(raiz.right != null){
+                if(raiz.right.data.equals(object)){
+                    raiz.right = reemplazar(raiz.right);
+                    elements--;
+                    return true;
+                }
+            }
+
+            boolean leftRemoved = removeDeep(raiz.left, object);
+            boolean rightRemoved =removeDeep(raiz.right, object);
+
+            return leftRemoved || rightRemoved;
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         return false;
     }
 

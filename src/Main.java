@@ -36,6 +36,7 @@ public class Main {
         tree.insertWidth("Jesús");
         tree.insertWidth("Stefanny");
         tree.insertWidth("Isabel");
+        tree.insertWidth("Camila");
 
         System.out.println("width");
         System.out.println(tree.widthOrder().toString());
@@ -53,7 +54,7 @@ public class Main {
         tree.insertDeep("Sebastian");
         tree.insertDeep("Ciro");
 
-        System.out.println("width");
+        System.out.println("widthOrder");
         System.out.println(tree.widthOrder().toString());
 
         System.out.println("inorder");
@@ -70,7 +71,14 @@ public class Main {
         System.out.println(tree.searchDeep("Andrés"));
         System.out.println(tree.searchWidth("Andrés"));
 
+        System.out.println("Remove: Miguel");
+        System.out.println(tree.removeWidth("Miguel"));
+        tree.removeWidth("Camila");
+        System.out.println("Remove: Ciro");
+        System.out.println(tree.removeDeep("Ciro"));
+        System.out.println(tree.widthOrder().toString());
 
+        System.out.println(tree.size());
         //System.out.println(tree.preOrderToString());
     }
 }
