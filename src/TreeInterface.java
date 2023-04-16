@@ -14,6 +14,7 @@ public interface TreeInterface<T> {
     int height();
     int size();
     boolean isEmpty();
+    //NodeCount() cuenta la cantidad de nodos desde la raiz
     int nodeCount();
     boolean isFull();
     boolean isComplete();

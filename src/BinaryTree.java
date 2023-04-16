@@ -1,7 +1,4 @@
 import Cola.DinamicQueue;
-import Cola.Tools.DoublyLinkedList;
-import Cola.Tools.DoublyLinkedListNode;
-import Cola.*;
 
 import java.util.LinkedList;
 
@@ -416,6 +413,8 @@ public class BinaryTree<T> implements TreeInterface<T> {
     public int size() {
         return elements;
     }
+
+    //NodeCount() cuenta la cantidad de nodos desde la raiz
     @Override
     public int nodeCount() {
         try{

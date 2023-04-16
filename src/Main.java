@@ -3,34 +3,6 @@ public class Main {
 
         BinaryTree<String> tree = new BinaryTree<>();
 
-        BinaryTreeNodez ejemplo = tree.root;
-
-        /*ejemplo.right = new BinaryTreeNodez("/");
-        ejemplo.left = new BinaryTreeNodez("*");
-
-        ejemplo = ejemplo.left;
-
-        ejemplo.setLeft(new BinaryTreeNodez("a"));
-        ejemplo.setRight(new BinaryTreeNodez("b"));
-
-        ejemplo = tree.root;
-        ejemplo = ejemplo.right;
-
-        ejemplo.setRight(new BinaryTreeNodez("d"));
-        ejemplo.setLeft(new BinaryTreeNodez("c"));
-
-        System.out.println("inorder");
-        System.out.println(tree.inOrderToString());
-
-        System.out.println("preorder");
-        System.out.println(tree.preOrderToString());
-
-        System.out.println("PostOrder");
-        System.out.println(tree.postOrderToString());
-
-        System.out.println("width");
-        System.out.println(tree.widthOrderToString());*/
-
         tree.insertWidth("Alicia");
         tree.insertWidth("Ramón");
         tree.insertWidth("Jesús");
@@ -73,12 +45,21 @@ public class Main {
 
         System.out.println("Remove: Miguel");
         System.out.println(tree.removeWidth("Miguel"));
-        tree.removeWidth("Camila");
+
         System.out.println("Remove: Ciro");
         System.out.println(tree.removeDeep("Ciro"));
         System.out.println(tree.widthOrder().toString());
 
-        System.out.println(tree.size());
-        //System.out.println(tree.preOrderToString());
+        System.out.println("Size:" + tree.size());
+
+        System.out.println("Height: " + tree.height());
+
+        System.out.println("Node count: " + tree.nodeCount());
+
+        System.out.println("Is Full?: " + tree.isFull());
+
+        System.out.println("Is complete?: " + tree.isComplete());
+
+
     }
 }
